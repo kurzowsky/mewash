@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeWash | Specjalistyczne usługi mycia ciśnieniowego</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath fill='%230ea5e9' d='M575.8 255.5c0 18-15 66-140 66-125 0-140-48-140-66 0-18 15-66 140-66 125 0 140 48 140 66zm-140 66c-125 0-140 48-140 66 0 18 15 66 140 66 125 0 140-48 140-66 0-18-15-66-140-66zM295.8 255.5c0 18-15 66-140 66-125 0-140-48-140-66 0-18 15-66 140-66 125 0 140 48 140 66zm-140 66c-125 0-140 48-140 66 0 18 15 66 140 66 125 0 140-48 140-66 0-18-15-66-140-66z'/%3E%3C/svg%3E">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#0ea5e9',
+                        dark: '#0f172a',
+                        accent: '#f59e0b',
+                    },
+                    animation: {
+                        'scroll': 'scroll 40s linear infinite', 
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        scroll: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-100%)' }, 
+                        },
+                        blob: {
+                            "0%": { transform: "translate(0px, 0px) scale(1)" },
+                            "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                            "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                            "100%": { transform: "translate(0px, 0px) scale(1)" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- SLIDER PRZED/PO --- */
+        #comparison {
+            width: 100%;
+            height: 60vw;
+            max-height: 500px;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .bg-after {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            /* Zastępcze zdjęcie PO */
+            background-image: url('po.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        #divisor {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            border-right: 3px solid white;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        .bg-before {
+            position: absolute;
+            width: 100vw;           
+            max-width: 56rem;
+            height: 100%;
+            /* Zastępcze zdjęcie PRZED */
+            background-image: url('przed.png');
+            background-size: cover;
+            background-position: center;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: absolute;
+            top: 50%;
+            left: -1%;
+            transform: translateY(-50%);
+            width: 102%; 
+            background-color: transparent;
+            z-index: 20;
+            cursor: ew-resize;
+            margin: 0;
+        }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 44px;
+            height: 44px;
+            background: #0ea5e9;
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.4);
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='20px' height='20px'%3E%3Cpath d='M0 0h24v24H0V0z' fill='none'/%3E%3Cpath d='M20 9l-4 4 4 4V9zm-16 8l4-4-4-4v8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        input[type=range]::-moz-range-thumb {
+            width: 44px;
+            height: 44px;
+            background: #0ea5e9;
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='20px' height='20px'%3E%3Cpath d='M0 0h24v24H0V0z' fill='none'/%3E%3Cpath d='M20 9l-4 4 4 4V9zm-16 8l4-4-4-4v8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .marquee-container:hover .animate-scroll {
+            animation-play-state: paused;
+        }
+
+        /* Styl dla efektu 3D Tilt */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased relative">
+
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <a href="#home" class="flex-shrink-0 flex items-center gap-2 group cursor-pointer transition-opacity hover:opacity-90">
+                    <i class="fa-solid fa-water text-3xl text-primary group-hover:scale-110 transition-transform duration-300"></i>
+                    <span class="font-bold text-2xl tracking-tight text-dark">Me<span class="text-primary">Wash</span></span>
+                </a>
+
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-slate-600 hover:text-primary font-medium transition">Start</a>
+                    <a href="#realizacje" class="text-slate-600 hover:text-primary font-medium transition">Realizacje</a>
+                    <a href="#dlaczego-my" class="text-slate-600 hover:text-primary font-medium transition">Oferta</a>
+                    <a href="#opinie" class="text-slate-600 hover:text-primary font-medium transition">Opinie</a>
+                    <a href="#faq" class="text-slate-600 hover:text-primary font-medium transition">FAQ</a>
+                    <a href="#kontakt" class="relative bg-primary hover:bg-sky-600 text-white px-6 py-2.5 rounded-full font-semibold shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5 overflow-hidden group">
+                        <span class="relative z-10">Darmowa Wycena</span>
+                        <div class="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-sky-600/50"></div>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-primary focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-3">
+            <a href="#home" class="block text-slate-600 font-medium">Start</a>
+            <a href="#realizacje" class="block text-slate-600 font-medium">Realizacje</a>
+            <a href="#dlaczego-my" class="block text-slate-600 font-medium">Oferta</a>
+            <a href="#faq" class="block text-slate-600 font-medium">FAQ</a>
+            <a href="#kontakt" class="block text-primary font-bold">Zamów Wycenę</a>
+        </div>
+    </nav>
+
+    <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <div class="absolute top-0 -left-4 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+            <div class="absolute top-0 -right-4 w-72 h-72 bg-cyan-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-8 left-20 w-72 h-72 bg-sky-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
+            
+            <img src="https://images.unsplash.com/photo-1596765275007-88599426f432?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover opacity-10 absolute inset-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-white via-transparent to-slate-50"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-primary font-semibold text-sm tracking-wide uppercase reveal">
+                Nowoczesna technologia mycia
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-dark tracking-tight mb-6 reveal" style="transition-delay: 100ms;">
+                Twoja kostka.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-700">Jak nowa.</span>
+            </h1>
+            <p class="mt-4 text-xl text-slate-600 max-w-2xl mx-auto mb-10 reveal" style="transition-delay: 200ms;">
+                Usuwamy wieloletni brud, mech i plamy olejowe. Zabezpieczamy nawierzchnię nano-impregnacją.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 reveal" style="transition-delay: 300ms;">
+                <a href="#kontakt" class="bg-primary hover:bg-sky-600 text-white text-lg px-8 py-4 rounded-full font-bold shadow-xl shadow-primary/40 transition transform hover:-translate-y-1">
+                    Zamów bezpłatną wycenę
+                </a>
+                <a href="#realizacje" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-lg px-8 py-4 rounded-full font-bold shadow-sm transition flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-images"></i> Zobacz efekty
+                </a>
+            </div>
+            
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-slate-200 pt-8 max-w-4xl mx-auto reveal" id="stats-section">
+                <div>
+                    <div class="text-3xl font-bold text-dark flex justify-center items-center"><span class="counter" data-target="50">0</span>+</div>
+                    <div class="text-sm text-slate-500 font-medium">Wykonanych zleceń</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-dark flex justify-center items-center"><span class="counter" data-target="95">0</span>%</div>
+                    <div class="text-sm text-slate-500 font-medium">Zadowolenia</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-dark flex justify-center items-center"><span class="counter" data-target="24">0</span>h</div>
+                    <div class="text-sm text-slate-500 font-medium">Czas realizacji</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-dark flex justify-center items-center">ECO</div>
+                    <div class="text-sm text-slate-500 font-medium">Bezpieczna chemia</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="realizacje" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Efekt, który mówi sam za siebie</h2>
+                <p class="text-slate-600 text-lg">Przesuń suwak, aby zobaczyć różnicę.</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto reveal border-4 border-white rounded-2xl shadow-2xl overflow-hidden bg-slate-200">
+                <div id="comparison">
+                    <div class="bg-after">
+                        <span class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded shadow select-none">PO MYCIU</span>
+                    </div>
+                    <div id="divisor">
+                        <div class="bg-before"></div>
+                        <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded shadow select-none">PRZED</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" id="slider" oninput="moveDivisor()" aria-label="Porównanie przed i po">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-slate-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Jak wygląda współpraca?</h2>
+                <p class="text-slate-600 text-lg">Prosty proces od telefonu do czystej kostki.</p>
+            </div>
+            <div class="relative">
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 -translate-y-1/2 z-0"></div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <div class="bg-white p-6 rounded-xl text-center reveal group hover:-translate-y-2 transition duration-300 shadow-lg border border-slate-100">
+                        <div class="w-16 h-16 mx-auto bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 shadow-lg shadow-primary/30 group-hover:scale-110 transition relative z-10">1</div>
+                        <h3 class="text-lg font-bold text-dark mb-2">Kontakt i Wycena</h3>
+                        <p class="text-sm text-slate-500">Dzwonisz, dajemy Ci wstępną wycenę.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl text-center reveal group hover:-translate-y-2 transition duration-300 shadow-lg border border-slate-100" style="transition-delay: 100ms;">
+                        <div class="w-16 h-16 mx-auto bg-white border-2 border-primary text-primary rounded-full flex items-center justify-center text-2xl font-bold mb-4 shadow-md group-hover:scale-110 transition relative z-10"><i class="fa-solid fa-calendar-check"></i></div>
+                        <h3 class="text-lg font-bold text-dark mb-2">Przyjazd i Mycie</h3>
+                        <p class="text-sm text-slate-500">Zabezpieczamy teren i myjemy.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl text-center reveal group hover:-translate-y-2 transition duration-300 shadow-lg border border-slate-100" style="transition-delay: 200ms;">
+                        <div class="w-16 h-16 mx-auto bg-white border-2 border-primary text-primary rounded-full flex items-center justify-center text-2xl font-bold mb-4 shadow-md group-hover:scale-110 transition relative z-10"><i class="fa-solid fa-spray-can-sparkles"></i></div>
+                        <h3 class="text-lg font-bold text-dark mb-2">Impregnacja (opcjonalnie)</h3>
+                        <p class="text-sm text-slate-500">Nakładamy warstwę ochronną.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl text-center reveal group hover:-translate-y-2 transition duration-300 shadow-lg border border-slate-100" style="transition-delay: 300ms;">
+                        <div class="w-16 h-16 mx-auto bg-green-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 shadow-lg shadow-green-500/30 group-hover:scale-110 transition relative z-10"><i class="fa-solid fa-check"></i></div>
+                        <h3 class="text-lg font-bold text-dark mb-2">Efekt WOW</h3>
+                        <p class="text-sm text-slate-500">Płacisz po wykonaniu usługi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dlaczego-my" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="tilt-card bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition duration-200 reveal border border-slate-100 relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                    <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6 text-primary text-2xl">
+                        <i class="fa-solid fa-temperature-high"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-3">Mycie Gorącowodne</h3>
+                    <p class="text-slate-600 leading-relaxed">Używamy przemysłowych myjek o temperaturze do 100°C.</p>
+                </div>
+
+                <div class="tilt-card bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition duration-200 reveal border border-slate-100 relative overflow-hidden group" style="transition-delay: 100ms;">
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-6 text-green-600 text-2xl">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-3">Ekologiczna Chemia</h3>
+                    <p class="text-slate-600 leading-relaxed">Nasze środki są w 100% biodegradowalne.</p>
+                </div>
+
+                <div class="tilt-card bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition duration-200 reveal border border-slate-100 relative overflow-hidden group" style="transition-delay: 200ms;">
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                    <div class="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6 text-orange-500 text-2xl">
+                        <i class="fa-solid fa-umbrella"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-3">Hydro-Impregnacja</h3>
+                    <p class="text-slate-600 leading-relaxed">Kostka sama się czyści podczas deszczu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="opinie" class="py-16 bg-slate-50 overflow-hidden border-t border-slate-100">
+        <div class="text-center mb-10 reveal">
+            <h2 class="text-2xl md:text-3xl font-bold text-dark">Co mówią klienci?</h2>
+        </div>
+        
+        <div class="marquee-container w-full overflow-hidden relative" style="mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
+            
+            <div class="flex gap-8 w-max hover:[animation-play-state:paused]">
+                
+                <div class="flex gap-8 animate-scroll shrink-0">
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="text-yellow-400 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-slate-600 text-sm mb-4">"Kostka wygląda jak w dniu zakupu. Nawet plamy po oleju zeszły. Polecam!"</p>
+                        <div class="font-bold text-dark text-sm">- Marek, Kraków</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="mb-2">
+                            <i class="fa-solid fa-star text-yellow-400"></i>
+                            <i class="fa-solid fa-star text-slate-200"></i>
+                            <i class="fa-solid fa-star text-slate-200"></i>
+                            <i class="fa-solid fa-star text-slate-200"></i>
+                            <i class="fa-solid fa-star text-slate-200"></i>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-4">"Niestety, plamy po oleju w ogóle nie zeszły, a kostka wygląda gorzej niż przed czyszczeniem. Strata pieniędzy."</p>
+                        <div class="font-bold text-dark text-sm">- Karol Nawrocki, Warszawa</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="text-yellow-400 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-slate-600 text-sm mb-4">"Szybko, sprawnie i bez bałaganu. Panowie zabezpieczyli elewację."</p>
+                        <div class="font-bold text-dark text-sm">- Anna, Wieliczka</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="text-yellow-400 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-slate-600 text-sm mb-4">"Najlepsza cena w okolicy, a efekt powala. Impregnacja robi robotę."</p>
+                        <div class="font-bold text-dark text-sm">- Tomasz, Skawina</div>
+                    </div>
+
+                     <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="text-yellow-400 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-slate-600 text-sm mb-4">"Pełen profesjonalizm. Terminowo i zgodnie z ustaleniami."</p>
+                        <div class="font-bold text-dark text-sm">- Firma Bud-Max</div>
+                    </div>
+                </div>
+
+                <div class="flex gap-8 animate-scroll shrink-0" aria-hidden="true">
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="text-yellow-400 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-slate-600 text-sm mb-4">"Kostka wygląda jak w dniu zakupu. Nawet plamy po oleju zeszły. Polecam!"</p>
+                        <div class="font-bold text-dark text-sm">- Marek, Kraków</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="mb-2">
+                            <i class="fa-solid fa-star text-yellow-400"></i>
+                            <i class="fa-solid fa-star text-slate-200"></i>
+                            <i class="fa-solid fa-star text-slate-200"></i>
+                            <i class="fa-solid fa-star text-slate-200"></i>
+                            <i class="fa-solid fa-star text-slate-200"></i>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-4">"Niestety, plamy po oleju w ogóle nie zeszły, a kostka wygląda gorzej niż przed czyszczeniem. Strata pieniędzy."</p>
+                        <div class="font-bold text-dark text-sm">- Karol Nawrocki, Warszawa</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="text-yellow-400 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-slate-600 text-sm mb-4">"Szybko, sprawnie i bez bałaganu. Panowie zabezpieczyli elewację."</p>
+                        <div class="font-bold text-dark text-sm">- Anna, Wieliczka</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="text-yellow-400 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-slate-600 text-sm mb-4">"Najlepsza cena w okolicy, a efekt powala. Impregnacja robi robotę."</p>
+                        <div class="font-bold text-dark text-sm">- Tomasz, Skawina</div>
+                    </div>
+
+                     <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 w-80 flex-shrink-0">
+                        <div class="text-yellow-400 mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-slate-600 text-sm mb-4">"Pełen profesjonalizm. Terminowo i zgodnie z ustaleniami."</p>
+                        <div class="font-bold text-dark text-sm">- Firma Bud-Max</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-20 bg-white border-t border-slate-100">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Pytania i odpowiedzi</h2>
+                <p class="text-slate-600 text-lg">Rozwiewamy wątpliwości dotyczące mycia ciśnieniowego.</p>
+            </div>
+
+            <div class="space-y-4 reveal">
+                <div class="group border border-slate-200 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md bg-slate-50">
+                    <button class="faq-btn flex justify-between items-center w-full p-6 text-left focus:outline-none">
+                        <span class="text-lg font-semibold text-dark group-hover:text-primary transition-colors">Czy chemia jest bezpieczna dla moich roślin?</span>
+                        <span class="icon transition-transform duration-300 text-primary bg-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+                        <div class="p-6 pt-0 text-slate-600 leading-relaxed border-t border-slate-100/50">
+                            Tak, w 100%. Używamy biodegradowalnych środków, które są bezlitosne dla brudu, ale neutralne dla zieleni i zwierząt domowych. W przypadku delikatnych roślin dodatkowo zabezpieczamy je folią lub zraszamy wodą przed myciem.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group border border-slate-200 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md bg-slate-50">
+                    <button class="faq-btn flex justify-between items-center w-full p-6 text-left focus:outline-none">
+                        <span class="text-lg font-semibold text-dark group-hover:text-primary transition-colors">Czy muszę udostępnić dostęp do prądu i wody?</span>
+                        <span class="icon transition-transform duration-300 text-primary bg-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+                        <div class="p-6 pt-0 text-slate-600 leading-relaxed border-t border-slate-100/50">
+                            Zazwyczaj potrzebujemy dostępu do ujęcia bieżącej wody (kran ogrodowy). Posiadamy własne węże o długości do 50m. W kwestii prądu – nasze maszyny są spalinowe, więc jesteśmy niezależni energetycznie.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group border border-slate-200 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md bg-slate-50">
+                    <button class="faq-btn flex justify-between items-center w-full p-6 text-left focus:outline-none">
+                        <span class="text-lg font-semibold text-dark group-hover:text-primary transition-colors">Czy usuwacie plamy z oleju silnikowego?</span>
+                        <span class="icon transition-transform duration-300 text-primary bg-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+                        <div class="p-6 pt-0 text-slate-600 leading-relaxed border-t border-slate-100/50">
+                            Tak, posiadamy specjalistyczną chemię do odtłuszczania i gorącą wodę, co pozwala usunąć większość plam olejowych. Należy jednak pamiętać, że jeśli olej wniknął głęboko w strukturę betonu lata temu, może pozostać delikatny cień.
+                        </div>
+                    </div>
+                </div>
+                
+                 <div class="group border border-slate-200 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-md bg-slate-50">
+                    <button class="faq-btn flex justify-between items-center w-full p-6 text-left focus:outline-none">
+                        <span class="text-lg font-semibold text-dark group-hover:text-primary transition-colors">Jak długo trzeba czekać na termin?</span>
+                        <span class="icon transition-transform duration-300 text-primary bg-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+                        <div class="p-6 pt-0 text-slate-600 leading-relaxed border-t border-slate-100/50">
+                            Staramy się działać ekspresowo. Standardowy czas oczekiwania to 3-7 dni roboczych. W sezonie wiosennym warto rezerwować termin z 2-tygodniowym wyprzedzeniem.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="kontakt" class="py-20 bg-dark text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <h2 class="text-4xl font-bold mb-6">Masz brudną kostkę?<br><span class="text-primary">Zajmiemy się tym.</span></h2>
+                    <p class="text-slate-400 mb-8 text-lg">Zrób darmową wycenę online lub zadzwoń. Działamy na terenie całego województwa.</p>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-primary"><i class="fa-solid fa-phone"></i></div>
+                            <div>
+                                <p class="text-sm text-slate-400">Zadzwoń teraz</p>
+                                <p class="text-xl font-bold">+48 796 548 295</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-primary"><i class="fa-solid fa-envelope"></i></div>
+                            <div>
+                                <p class="text-sm text-slate-400">Napisz do nas</p>
+                                <p class="text-xl font-bold">mail@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-2xl reveal text-dark">
+                    <form id="estimation-form" class="space-y-4">
+                        <h3 class="text-xl font-bold mb-4">Szybka wycena</h3>
+                        <div>
+                            <label for="serviceType" class="block text-sm font-medium text-slate-700 mb-1">Rodzaj usługi</label>
+                            <select id="serviceType" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-dark transition">
+                                <option value="8">Mycie kostki brukowej (8 PLN/m²)</option>
+                                <option value="12">Mycie elewacji (12 PLN/m²)</option>
+                                <option value="6">Impregnacja (6 PLN/m²)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="acreageInput" class="block text-sm font-medium text-slate-700 mb-1">Szacowany metraż (m²)</label>
+                            <input type="number" id="acreageInput" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-dark transition" placeholder="np. 50" min="1" value="50">
+                        </div>
+                        <div id="estimationResult" class="bg-blue-50 border border-blue-200 text-dark p-3 rounded-lg font-bold text-center hidden"></div>
+                        <button type="button" id="calculate-estimation" class="w-full bg-primary hover:bg-sky-600 text-white font-bold py-4 rounded-lg shadow-lg transition transform hover:-translate-y-1 mt-4 relative overflow-hidden">
+                            Odbierz Wstępną Wycenę
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-500 py-8 border-t border-slate-800 text-center text-sm">
+        <p>&copy; 2025 MeWash. Wszelkie prawa zastrzeżone.</p>
+    </footer>
+
+    <button id="scrollToTopBtn" class="fixed bottom-8 right-8 bg-primary hover:bg-sky-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 opacity-0 translate-y-10 z-40 pointer-events-none">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 1. Mobile Menu
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+        
+        // 2. Scroll Reveal
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+
+        // 3. Slider Logic
+        function moveDivisor() {
+            const slider = document.getElementById("slider");
+            const divisor = document.getElementById("divisor");
+            if (slider && divisor) {
+                divisor.style.width = slider.value + "%";
+            }
+        }
+        
+        // 4. Kalkulator + KONFETTI
+        const serviceType = document.getElementById('serviceType');
+        const acreageInput = document.getElementById('acreageInput');
+        const calculateBtn = document.getElementById('calculate-estimation');
+        const resultDiv = document.getElementById('estimationResult');
+        
+        if (calculateBtn) {
+            calculateBtn.addEventListener('click', (e) => {
+                const pricePerSqMeter = parseFloat(serviceType.value);
+                const acreage = parseInt(acreageInput.value); 
+                if (isNaN(acreage) || acreage <= 0) {
+                    resultDiv.innerHTML = "🚨 Podaj poprawny metraż (m²).";
+                    resultDiv.classList.remove('hidden', 'bg-blue-50', 'border-blue-200');
+                    resultDiv.classList.add('bg-red-100', 'border-red-300');
+                    resultDiv.classList.remove('hidden');
+                    return;
+                }
+                const serviceName = serviceType.options[serviceType.selectedIndex].text.split('(')[0].trim();
+                const totalCost = acreage * pricePerSqMeter;
+                resultDiv.innerHTML = `
+                    💰 Wstępna wycena za <strong>${serviceName}</strong> (${acreage} m²) to: 
+                    <br><span class="text-primary font-extrabold text-2xl">${totalCost.toFixed(0)} PLN</span>.
+                `;
+                resultDiv.classList.remove('hidden', 'bg-red-100', 'border-red-300');
+                resultDiv.classList.add('bg-blue-50', 'border-blue-200');
+
+                // --- EFEKT KONFETTI ---
+                // Funkcja pomocnicza do losowości
+                function randomInRange(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                // Wystrzał konfetti
+                confetti({
+                    angle: randomInRange(55, 125),
+                    spread: randomInRange(50, 70),
+                    particleCount: randomInRange(50, 100),
+                    origin: { y: 0.6 },
+                    colors: ['#0ea5e9', '#0f172a', '#f59e0b'] // Kolory marki (niebieski, ciemny, żółty)
+                });
+            });
+        }
+
+        // 5. Animacja Liczników
+        const statsSection = document.getElementById('stats-section');
+        const counters = document.querySelectorAll('.counter');
+        let started = false; 
+        
+        function handleScroll() {
+            // Animacja Scroll Reveal
+            reveal();
+
+            // Animacja Liczników
+            if(statsSection) {
+                const sectionPos = statsSection.getBoundingClientRect().top;
+                const screenPos = window.innerHeight / 1.2;
+                
+                if(sectionPos < screenPos && !started) {
+                    counters.forEach(counter => {
+                        let current = 0;
+                        const target = +counter.getAttribute('data-target');
+                        const updateCount = () => {
+                            if(current < target) {
+                                current += Math.ceil(target / 50); 
+                                if(current > target) current = target;
+                                counter.innerText = current;
+                                setTimeout(updateCount, 30);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCount();
+                    });
+                    started = true;
+                }
+            }
+
+            // Scroll to Top Button Logic
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            if (window.scrollY > 500) {
+                scrollToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+                scrollToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                scrollToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                scrollToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+
+        // Scroll to Top Click Event
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        if(scrollToTopBtn) {
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // 6. FAQ Accordion Logic
+        const faqBtns = document.querySelectorAll('.faq-btn');
+        
+        faqBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('.icon');
+                const iconInner = icon.querySelector('i');
+
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.classList.remove('bg-primary', 'text-white', 'rotate-45');
+                    icon.classList.add('bg-white', 'text-primary');
+                    iconInner.classList.remove('fa-minus');
+                    iconInner.classList.add('fa-plus');
+                } else {
+                    document.querySelectorAll('.faq-content').forEach(el => el.style.maxHeight = null);
+                    document.querySelectorAll('.faq-btn .icon').forEach(el => {
+                         el.classList.remove('bg-primary', 'text-white', 'rotate-45');
+                         el.classList.add('bg-white', 'text-primary');
+                         el.querySelector('i').classList.remove('fa-minus');
+                         el.querySelector('i').classList.add('fa-plus');
+                    });
+
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.classList.remove('bg-white', 'text-primary');
+                    icon.classList.add('bg-primary', 'text-white', 'rotate-45');
+                    iconInner.classList.remove('fa-plus');
+                    iconInner.classList.add('fa-minus');
+                }
+            });
+        });
+
+        // 7. Logic for 3D Tilt Effect on Cards
+        const tiltCards = document.querySelectorAll('.tilt-card');
+
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Oblicz środek karty
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Oblicz rotację (max 10 stopni)
+                const rotateX = ((y - centerY) / centerY) * -10; 
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                // Zastosuj styl
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            });
+
+            // Reset po wyjechaniu myszką
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+            });
+        });
+
+        window.onload = function() {
+            moveDivisor();
+            reveal(); 
+        };
+    </script>
+</body>
+</html>
