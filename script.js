@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let pricePerSqMeter = 0;
 
         if (serviceKey === 'paving') {
-            pricePerSqMeter = acreage <= 100 ? 10 : 8;
+            pricePerSqMeter = acreage <= 100 ? 12 : 10;
         } else if (serviceKey === 'facade') {
             pricePerSqMeter = acreage <= 50 ? 12 : 10;
         } else if (serviceKey === 'impregnation') {
@@ -273,5 +273,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    reveal(); 
+    reveal();
 });
