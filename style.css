@@ -1,0 +1,90 @@
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- SLIDER PRZED/PO (Teraz oparty na klasach) --- */
+.comparison-container {
+    width: 100%;
+    /* Wysokość jest ustawiana inline w HTML, ale tu zabezpieczenie */
+    position: relative;
+    overflow: hidden;
+    /* Usuwamy border-radius tutaj, bo jest w kontenerze głównym */
+}
+
+.bg-after {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.divisor {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    border-right: 3px solid white;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+
+.bg-before {
+    position: absolute;
+    width: 100vw;           
+    max-width: 56rem;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+input[type=range].slider-range {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: absolute;
+    top: 50%;
+    left: -1%;
+    transform: translateY(-50%);
+    width: 102%; 
+    background-color: transparent;
+    z-index: 20;
+    cursor: ew-resize;
+    margin: 0;
+}
+input[type=range].slider-range:focus { outline: none; }
+input[type=range].slider-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 44px;
+    height: 44px;
+    background: #0ea5e9;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='20px' height='20px'%3E%3Cpath d='M0 0h24v24H0V0z' fill='none'/%3E%3Cpath d='M20 9l-4 4 4 4V9zm-16 8l4-4-4-4v8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+input[type=range].slider-range::-moz-range-thumb {
+    width: 44px;
+    height: 44px;
+    background: #0ea5e9;
+    border: 3px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='20px' height='20px'%3E%3Cpath d='M0 0h24v24H0V0z' fill='none'/%3E%3Cpath d='M20 9l-4 4 4 4V9zm-16 8l4-4-4-4v8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Styl dla efektu 3D Tilt */
+.tilt-card {
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+}
