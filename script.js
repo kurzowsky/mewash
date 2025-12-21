@@ -54,14 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     sliders.forEach(slider => {
         slider.addEventListener('input', (e) => {
-            // Znajdź najbliższy kontener rodzica, a w nim element divisor
             const container = e.target.closest('.comparison-container');
             const divisor = container.querySelector('.divisor');
             if (divisor) {
                 divisor.style.width = e.target.value + "%";
             }
         });
-        // Inicjalizacja pozycji (50%)
         const container = slider.closest('.comparison-container');
         const divisor = container.querySelector('.divisor');
         if (divisor) {
@@ -69,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3.1 Logic for Carousel (Przesuwanie slajdów)
+    // 3.1 Logic for Carousel
     const track = document.getElementById('carousel-track');
     const prevBtn = document.getElementById('prev-slide');
     const nextBtn = document.getElementById('next-slide');
@@ -80,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalSlides = slides.length;
 
         function updateCarousel() {
-            const width = 100; // 100% szerokości
+            const width = 100;
             track.style.transform = `translateX(-${currentIndex * width}%)`;
         }
 
@@ -101,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const acreageInput = document.getElementById('acreageInput');
     const resultDiv = document.getElementById('estimationResult');
     
-    // Funkcja obliczająca
     function calculateEstimation() {
         const acreage = parseInt(acreageInput.value); 
         const serviceKey = serviceTypeSelect.value;
@@ -114,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Logika cenowa
         let pricePerSqMeter = 0;
 
         if (serviceKey === 'paving') {
@@ -135,27 +131,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         resultDiv.classList.remove('hidden', 'bg-red-100', 'border-red-300');
         resultDiv.classList.add('bg-blue-50', 'border-blue-200');
-
-        // --- EFEKT KONFETTI ---
-        function randomInRange(min, max) {
-            return Math.random() * (max - min) + min;
-        }
-
-        if (typeof confetti === 'function') {
-            confetti({
-                angle: randomInRange(55, 125),
-                spread: randomInRange(50, 70),
-                particleCount: randomInRange(50, 100),
-                origin: { y: 0.6 },
-                colors: ['#0ea5e9', '#0f172a', '#f59e0b']
-            });
-        }
     }
 
     if (form) {
-        // Obsługa wysyłania formularza (Enter lub kliknięcie)
         form.addEventListener('submit', (e) => {
-            e.preventDefault(); // Zapobiega przeładowaniu strony
+            e.preventDefault();
             calculateEstimation();
         });
     }
@@ -166,10 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let started = false; 
     
     function handleScroll() {
-        // Animacja Scroll Reveal
         reveal();
 
-        // Animacja Liczników
         if(statsSection) {
             const sectionPos = statsSection.getBoundingClientRect().top;
             const screenPos = window.innerHeight / 1.2;
@@ -194,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Scroll to Top Button Logic
         const scrollToTopBtn = document.getElementById('scrollToTopBtn');
         if (scrollToTopBtn) {
             if (window.scrollY > 500) {
@@ -209,7 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', handleScroll);
 
-    // Scroll to Top Click Event
     const scrollToTopBtn = document.getElementById('scrollToTopBtn');
     if(scrollToTopBtn) {
         scrollToTopBtn.addEventListener('click', () => {
