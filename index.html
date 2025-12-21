@@ -17,9 +17,15 @@
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath fill='%230ea5e9' d='M575.8 255.5c0 18-15 66-140 66-125 0-140-48-140-66 0-18 15-66 140-66 125 0 140 48 140 66zm-140 66c-125 0-140 48-140 66 0 18 15 66 140 66 125 0 140-48 140-66 0-18-15-66-140-66zM295.8 255.5c0 18-15 66-140 66-125 0-140-48-140-66 0-18 15-66 140-66 125 0 140 48 140 66zm-140 66c-125 0-140 48-140 66 0 18 15 66 140 66 125 0 140-48 140-66 0-18-15-66-140-66z'/%3E%3C/svg%3E">
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://images.unsplash.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
 
     <script type="application/ld+json">
@@ -91,7 +97,16 @@
             <div class="absolute top-0 -left-4 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
             <div class="absolute top-0 -right-4 w-72 h-72 bg-cyan-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
             <div class="absolute -bottom-8 left-20 w-72 h-72 bg-sky-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
-            <img src="https://images.unsplash.com/photo-1596765275007-88599426f432?q=80&w=2070&auto=format&fit=crop" alt="Mycie kostki brukowej myjką ciśnieniową" class="w-full h-full object-cover opacity-10 absolute inset-0">
+            
+            <img 
+                src="https://images.unsplash.com/photo-1596765275007-88599426f432?q=60&w=1920&auto=format&fit=crop"
+                srcset="https://images.unsplash.com/photo-1596765275007-88599426f432?q=50&w=640&auto=format&fit=crop 640w,
+                        https://images.unsplash.com/photo-1596765275007-88599426f432?q=60&w=1920&auto=format&fit=crop 1920w"
+                sizes="(max-width: 640px) 100vw, 100vw"
+                alt="Mycie kostki brukowej myjką ciśnieniową" 
+                class="w-full h-full object-cover opacity-10 absolute inset-0"
+                fetchpriority="high"
+            >
             <div class="absolute inset-0 bg-gradient-to-b from-white via-transparent to-slate-50"></div>
         </div>
 
@@ -147,22 +162,22 @@
                 <div id="carousel-track" class="flex transition-transform duration-500 ease-in-out w-full">
                     
                     <div class="min-w-full relative comparison-container" style="height: 60vw; max-height: 500px; min-height: 300px;">
-                        <div class="bg-after" style="background-image: url('po1.webp');" role="img" aria-label="Kostka brukowa po myciu ciśnieniowym">
+                        <div class="bg-after" style="background-image: url('po1.jpg');" role="img" aria-label="Kostka brukowa po myciu ciśnieniowym">
                             <span class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded shadow select-none">PO MYCIU</span>
                         </div>
                         <div class="divisor">
-                            <div class="bg-before" style="background-image: url('przed1.webp');" role="img" aria-label="Brudna kostka brukowa przed myciem"></div>
+                            <div class="bg-before" style="background-image: url('przed1.png');" role="img" aria-label="Brudna kostka brukowa przed myciem"></div>
                             <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded shadow select-none">PRZED</span>
                         </div>
                         <input type="range" min="0" max="100" value="50" class="slider-range" aria-label="Porównanie przed i po myciu kostki">
                     </div>
 
                     <div class="min-w-full relative comparison-container" style="height: 60vw; max-height: 500px; min-height: 300px;">
-                        <div class="bg-after" style="background-image: url('po2.webp');" role="img" aria-label="Czysty podjazd po usłudze MeWash">
+                        <div class="bg-after" style="background-image: url('po2.png');" role="img" aria-label="Czysty podjazd po usłudze MeWash">
                             <span class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded shadow select-none">PO MYCIU</span>
                         </div>
                         <div class="divisor">
-                            <div class="bg-before" style="background-image: url('przed2.webp');" role="img" aria-label="Zabrudzony podjazd mchem"></div>
+                            <div class="bg-before" style="background-image: url('przed2.png');" role="img" aria-label="Zabrudzony podjazd mchem"></div>
                             <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded shadow select-none">PRZED</span>
                         </div>
                         <input type="range" min="0" max="100" value="50" class="slider-range" aria-label="Porównanie przed i po">
@@ -192,7 +207,7 @@
         </div>
     </section>
 
-<section class="py-20 bg-slate-50 overflow-hidden">
+    <section class="py-20 bg-slate-50 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
                 <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Jak wygląda współpraca?</h2>
@@ -520,6 +535,7 @@
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="script.js"></script>
 </body>
 </html>
