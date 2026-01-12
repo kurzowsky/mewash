@@ -1,29 +1,3 @@
-// --- KONFIGURACJA TAILWIND ---
-tailwind.config = {
-    theme: {
-        extend: {
-            fontFamily: { sans: ['Inter', 'sans-serif'] },
-            colors: {
-                primary: '#0ea5e9',
-                dark: '#0f172a',
-                accent: '#f59e0b',
-            },
-            animation: {
-                'blob': 'blob 7s infinite',
-            },
-            keyframes: {
-                blob: {
-                    "0%": { transform: "translate(0px, 0px) scale(1)" },
-                    "33%": { transform: "translate(30px, -50px) scale(1.1)" },
-                    "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
-                    "100%": { transform: "translate(0px, 0px) scale(1)" }
-                }
-            }
-        }
-    }
-}
-
-// --- LOGIKA APLIKACJI ---
 document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Mobile Menu
@@ -78,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalSlides = slides.length;
 
         function updateCarousel() {
-            const width = 100;
-            track.style.transform = `translateX(-${currentIndex * width}%)`;
+            // Przesuwamy o 100% szerokości
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
         }
 
         nextBtn.addEventListener('click', () => {
@@ -103,10 +77,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const acreage = parseInt(acreageInput.value); 
         const serviceKey = serviceTypeSelect.value;
         
+        resultDiv.className = 'estimation-result'; // Reset klas
+        
         if (isNaN(acreage) || acreage <= 0) {
             resultDiv.innerHTML = "🚨 Podaj poprawny metraż (m²).";
-            resultDiv.classList.remove('hidden', 'bg-blue-50', 'border-blue-200');
-            resultDiv.classList.add('bg-red-100', 'border-red-300');
+            // Możemy dodać styl inline dla błędu lub dodatkową klasę w CSS
+            resultDiv.style.backgroundColor = '#fee2e2'; // red-100
+            resultDiv.style.borderColor = '#fca5a5'; // red-300
+            resultDiv.style.color = '#991b1b'; // red-800
             resultDiv.classList.remove('hidden');
             return;
         }
@@ -123,14 +101,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const serviceName = serviceTypeSelect.options[serviceTypeSelect.selectedIndex].text;
         const totalCost = acreage * pricePerSqMeter;
-        
+        const mintotal = totalCost - 100;
+        const maxtotal = totalCost + 100;
+
         resultDiv.innerHTML = `
             💰 Wstępna wycena za <strong>${serviceName}</strong> (${acreage} m²) to: 
-            <br><span class="text-primary font-extrabold text-2xl">${totalCost.toFixed(0)} PLN</span>.
-            <br><span class="text-xs text-slate-500 font-normal">(Stawka przyjęta: ${pricePerSqMeter} PLN/m²)</span>
+            <br><span style="color:var(--primary); font-size:1.5rem;">${mintotal} - ${maxtotal} PLN</span>.
+            <br><span style="font-size:0.75rem; color:var(--slate-500); font-weight:400;">(Stawka przyjęta: ok. ${pricePerSqMeter} PLN/m²)</span>
         `;
-        resultDiv.classList.remove('hidden', 'bg-red-100', 'border-red-300');
-        resultDiv.classList.add('bg-blue-50', 'border-blue-200');
+        resultDiv.classList.remove('hidden');
     }
 
     if (form) {
@@ -175,11 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const scrollToTopBtn = document.getElementById('scrollToTopBtn');
         if (scrollToTopBtn) {
             if (window.scrollY > 500) {
-                scrollToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-                scrollToTopBtn.classList.add('opacity-100', 'translate-y-0');
+                scrollToTopBtn.classList.add('visible');
             } else {
-                scrollToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-                scrollToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+                scrollToTopBtn.classList.remove('visible');
             }
         }
     }
@@ -196,35 +173,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. FAQ Accordion Logic
+    // 6. FAQ Accordion Logic (Uproszczona obsługa CSS)
     const faqBtns = document.querySelectorAll('.faq-btn');
     
     faqBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const content = btn.nextElementSibling;
-            const icon = btn.querySelector('.icon');
-            const iconInner = icon.querySelector('i');
+            const iconInner = btn.querySelector('.faq-icon i');
+            
+            // Sprawdzamy czy ten przycisk jest już aktywny
+            const isActive = btn.classList.contains('active');
 
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-                icon.classList.remove('bg-primary', 'text-white', 'rotate-45');
-                icon.classList.add('bg-white', 'text-primary');
-                iconInner.classList.remove('fa-minus');
-                iconInner.classList.add('fa-plus');
-            } else {
-                document.querySelectorAll('.faq-content').forEach(el => el.style.maxHeight = null);
-                document.querySelectorAll('.faq-btn .icon').forEach(el => {
-                        el.classList.remove('bg-primary', 'text-white', 'rotate-45');
-                        el.classList.add('bg-white', 'text-primary');
-                        el.querySelector('i').classList.remove('fa-minus');
-                        el.querySelector('i').classList.add('fa-plus');
-                });
+            // 1. Zamknij wszystko
+            document.querySelectorAll('.faq-content').forEach(el => el.style.maxHeight = null);
+            document.querySelectorAll('.faq-btn').forEach(el => {
+                el.classList.remove('active');
+                const i = el.querySelector('.faq-icon i');
+                if(i) {
+                    i.classList.remove('fa-minus');
+                    i.classList.add('fa-plus');
+                }
+            });
 
+            // 2. Jeśli nie był aktywny, otwórz go
+            if (!isActive) {
+                btn.classList.add('active');
                 content.style.maxHeight = content.scrollHeight + "px";
-                icon.classList.remove('bg-white', 'text-primary');
-                icon.classList.add('bg-primary', 'text-white', 'rotate-45');
-                iconInner.classList.remove('fa-plus');
-                iconInner.classList.add('fa-minus');
+                if(iconInner) {
+                    iconInner.classList.remove('fa-plus');
+                    iconInner.classList.add('fa-minus');
+                }
             }
         });
     });
