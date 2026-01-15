@@ -1,8 +1,146 @@
+/* --- KRYTYCZNE STYLE - ładowane jako pierwsze --- */
+:root {
+    --primary: #0ea5e9;
+    --dark: #0f172a;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+}
+
+/* Podstawowe klasy kolorów (fallback przed Tailwind) */
+.text-primary {
+    color: #0ea5e9;
+}
+
+.text-dark {
+    color: #0f172a;
+}
+
+.bg-primary {
+    background-color: #0ea5e9;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Ukrycie paska przewijania dla poziomego scroll na mobile */
+.overflow-x-auto::-webkit-scrollbar {
+    display: none;
+}
+
+.overflow-x-auto {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@media (max-width: 767px) {
+    .shadow-fix-universal {
+        padding: 60px 40px !important;
+        margin: -60px -40px !important;
+    }
+}
+
+/* Fix dla cienia kafelków (do lg - 1023px) */
+@media (max-width: 1023px) {
+    .shadow-fix-lg {
+        padding: 60px 40px !important;
+        margin: -60px -40px !important;
+    }
+}
+
+/* Animacja wskaźnika przewijania */
+@keyframes swipe-hint {
+
+    0%,
+    100% {
+        transform: translateX(-10px);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+}
+
+.animate-swipe-hint {
+    animation: swipe-hint 1.5s infinite ease-in-out;
+}
+
+/* Powolne pulsowanie dla paska promocji */
+@keyframes pulse-slow {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Modal Animations */
+@keyframes scale-in {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.scale-in {
+    animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fade-in-up {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.4s ease-out forwards;
+}
+
+@keyframes fade-in-up-centered {
+    0% {
+        transform: translate(-50%, 20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+.animate-fade-in-up-centered {
+    animation: fade-in-up-centered 0.4s ease-out forwards;
+}
+
+/* --- ANIMACJE REVEAL --- */
 .reveal {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease-out;
 }
+
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
@@ -31,13 +169,13 @@
     height: 100%;
     overflow: hidden;
     border-right: 3px solid white;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
     z-index: 10;
 }
 
 .bg-before {
     position: absolute;
-    width: 100vw;           
+    width: 100vw;
     max-width: 56rem;
     height: 100%;
     background-size: cover;
@@ -51,13 +189,17 @@ input[type=range].slider-range {
     top: 50%;
     left: -1%;
     transform: translateY(-50%);
-    width: 102%; 
+    width: 102%;
     background-color: transparent;
     z-index: 20;
     cursor: ew-resize;
     margin: 0;
 }
-input[type=range].slider-range:focus { outline: none; }
+
+input[type=range].slider-range:focus {
+    outline: none;
+}
+
 input[type=range].slider-range::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 44px;
@@ -65,12 +207,13 @@ input[type=range].slider-range::-webkit-slider-thumb {
     background: #0ea5e9;
     border: 3px solid white;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     cursor: pointer;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='20px' height='20px'%3E%3Cpath d='M0 0h24v24H0V0z' fill='none'/%3E%3Cpath d='M20 9l-4 4 4 4V9zm-16 8l4-4-4-4v8z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
 }
+
 input[type=range].slider-range::-moz-range-thumb {
     width: 44px;
     height: 44px;
@@ -90,21 +233,94 @@ input[type=range].slider-range::-moz-range-thumb {
 }
 
 .logo-img {
-            height: 35px;
-            width: auto;  
-            transition: transform 0.3s ease;
+    height: 35px;
+    width: auto;
+    transition: transform 0.3s ease;
 }
 
 .logo-img:hover {
-            transform: scale(1.05); /* Lekkie powiększenie po najechaniu */
+    transform: scale(1.05);
+    /* Lekkie powiększenie po najechaniu */
 }
 
 .icon-img {
-            height: 40px;
-            width: auto;  
-            transition: transform 0.3s ease;
+    height: 40px;
+    width: auto;
+    transition: transform 0.3s ease;
 }
 
 .icon-img:hover {
-            transform: scale(1.05); /* Lekkie powiększenie po najechaniu */
+    transform: scale(1.05);
+    /* Lekkie powiększenie po najechaniu */
+}
+
+/* --- MAPA GOOGLE MAPS - SEKCJA ZASIĘGU --- */
+.coverage-map {
+    height: 450px;
+    width: 100%;
+}
+
+.map-overlay-info {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f5f9;
+}
+
+.map-legend {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f5f9;
+}
+
+.map-pulse-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: #0ea5e9;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.map-legend-dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.map-legend-dot--free {
+    background: rgba(34, 197, 94, 0.3);
+    border: 2px solid #22c55e;
+}
+
+.map-legend-dot--paid {
+    background: #e2e8f0;
+    border: 2px solid #94a3b8;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
 }
