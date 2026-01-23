@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Wywołaj przy ładowaniu strony
-    restoreDiscountCodeOnLoad();
+    // restoreDiscountCodeOnLoad(); // TYMCZASOWO WYŁĄCZONE
 
     // --- FUNKCJA WYSYŁAJĄCA DO DISCORDA ---
     function wyslijDoDiscorda(dane) {
@@ -541,15 +541,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Cennik
         if (serviceKey === 'pakiet_podstawowy') {
-            pricePerSqMeter = 15;
+            if (acreage <= 100) pricePerSqMeter = 18;
+            else if (acreage <= 200) pricePerSqMeter = 15;
+            else if (acreage <= 300) pricePerSqMeter = 12;
+            else pricePerSqMeter = 10;
         } else if (serviceKey === 'pakiet_standard') {
-            pricePerSqMeter = 32;
+            if (acreage <= 100) pricePerSqMeter = 18 + 15;
+            else if (acreage <= 200) pricePerSqMeter = 15 + 15;
+            else if (acreage <= 300) pricePerSqMeter = 12 + 15;
+            else pricePerSqMeter = 10 + 15;
         } else if (serviceKey === 'pakiet_premium') {
-            pricePerSqMeter = 40;
+            if (acreage <= 100) pricePerSqMeter = 18 + 25;
+            else if (acreage <= 200) pricePerSqMeter = 15 + 25;
+            else if (acreage <= 300) pricePerSqMeter = 12 + 25;
+            else pricePerSqMeter = 10 + 25;
         } else if (serviceKey === 'mycie_kostki') {
             if (acreage <= 100) pricePerSqMeter = 18;
             else if (acreage <= 200) pricePerSqMeter = 15;
-            else pricePerSqMeter = 12;
+            else if (acreage <= 300) pricePerSqMeter = 12;
+            else pricePerSqMeter = 10;
         } else if (serviceKey === 'impregnacja_1') {
             pricePerSqMeter = 15;
         } else if (serviceKey === 'impregnacja_2') {
@@ -604,7 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
         wyslijDoDiscorda(daneDoWyslania);
 
         // Obsługa kodu rabatowego (tylko za pierwszym razem)
-        handleDiscountCode(serviceName, acreage, daneDoWyslania.szacowany_koszt);
+        // handleDiscountCode(serviceName, acreage, daneDoWyslania.szacowany_koszt); // TYMCZASOWO WYŁĄCZONE
     }
 
     if (form) {
