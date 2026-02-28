@@ -210,11 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultDiv.classList.remove('hidden', 'bg-red-100', 'border-red-300');
         resultDiv.classList.add('bg-blue-50', 'border-blue-200');
 
-        // Wywołanie wysyłki na Discorda
-        wyslijDoDiscorda(daneDoWyslania);
 
-        // Obsługa kodu rabatowego (tylko za pierwszym razem)
-        // handleDiscountCode(serviceName, acreage, daneDoWyslania.szacowany_koszt); // TYMCZASOWO WYŁĄCZONE
     }
 
     if (form) {
@@ -542,4 +538,5 @@ function initCoverageMap() {
 }
 
 // Wywołanie po załadowaniu Google Maps API
+
 window.initCoverageMap = initCoverageMap;
