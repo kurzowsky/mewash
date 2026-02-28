@@ -915,18 +915,19 @@
         </div>
     </section>
 
-    <section id="kontakt" class="py-20 bg-dark text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="reveal">
+    <section id="kontakt" class="py-20 bg-dark text-white text-center">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center">
+                <div class="reveal w-full">
                     <h2 class="text-4xl font-bold mb-6">Masz brudną kostkę?<br><span class="text-primary">Myjnia MeWash
                             pomoże.</span></h2>
-                    <p class="text-slate-400 mb-8 text-lg">Zrób darmową wycenę online lub zadzwoń. Działamy na terenie
+                    <p class="text-slate-400 mb-8 text-lg max-w-2xl mx-auto">Zrób darmową wycenę online lub zadzwoń.
+                        Działamy na terenie
                         powiatu tureckiego oraz całego województwa wielkopolskiego.</p>
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-4">
+                    <div class="space-y-6 flex flex-col items-center">
+                        <div class="flex items-center gap-4 text-left">
                             <div
-                                class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-primary">
+                                class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-primary shrink-0">
                                 <i class="fa-solid fa-phone"></i>
                             </div>
                             <div>
@@ -935,9 +936,9 @@
                                     796 548 295</a>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-4 text-left">
                             <div
-                                class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-primary">
+                                class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-primary shrink-0">
                                 <i class="fa-solid fa-envelope"></i>
                             </div>
                             <div>
@@ -946,43 +947,6 @@
                                     class="text-xl font-bold hover:text-primary transition">mewashmain@gmail.com</a>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="reveal" style="transition-delay: 100ms;">
-                    <div class="bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10">
-                        <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
-                            <i class="fa-solid fa-paper-plane text-primary"></i>
-                            Napisz do nas
-                        </h3>
-                        <form id="contact-form" class="space-y-4">
-                            <div>
-                                <label for="contactName"
-                                    class="block text-sm font-medium text-slate-300 mb-1">Imię</label>
-                                <input type="text" id="contactName" required
-                                    class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
-                                    placeholder="Twoje imię">
-                            </div>
-                            <div>
-                                <label for="contactPhone" class="block text-sm font-medium text-slate-300 mb-1">Telefon
-                                    lub Email</label>
-                                <input type="text" id="contactPhone" required
-                                    class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
-                                    placeholder="+48 123 456 789 lub email@example.com">
-                            </div>
-                            <div>
-                                <label for="contactMessage"
-                                    class="block text-sm font-medium text-slate-300 mb-1">Wiadomość</label>
-                                <textarea id="contactMessage" rows="4" required
-                                    class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition resize-none"
-                                    placeholder="Opisz swoje zapytanie..."></textarea>
-                            </div>
-                            <button type="submit" id="contactSubmitBtn"
-                                class="w-full bg-primary hover:bg-sky-600 text-white font-semibold py-4 rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-paper-plane"></i>
-                                Wyślij wiadomość
-                            </button>
-                            <div id="contactFormStatus" class="hidden text-center py-3 rounded-xl"></div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -1030,8 +994,8 @@
             </div>
 
             <div class="text-center mt-12 pt-8 border-t border-slate-800 text-slate-500">
-                <p>&copy; 2026 mewash.pl. Wszelkie prawa zastrzeżone. Made by 
-                    <a href="https://jakubgaldyn.pl" 
+                <p>&copy; 2026 mewash.pl. Wszelkie prawa zastrzeżone. Made by
+                    <a href="https://jakubgaldyn.pl"
                         class="mt-4 inline-flex items-center gap-2 text-primary hover:text-sky-600 font-medium text-sm transition">
                         Jakub Gałdyn
                     </a>
