@@ -26,7 +26,7 @@ tailwind.config = {
 // --- LOGIKA APLIKACJI ---
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 0. Dynamic Promo Bar & Navbar Adjustment
+    // 0. Dynamic Promo Bar & Navbar Adjustmentz
     const promoBar = document.getElementById('promo-bar');
     const navbar = document.getElementById('navbar');
 
@@ -175,20 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const serviceName = serviceTypeSelect.options[serviceTypeSelect.selectedIndex].text;
 
-        // Dane do wysyłki
-        let daneDoWyslania = {
-            usluga: serviceName,
-            metraz: acreage,
-            szacowany_koszt: "",
-            zrodlo: "mewash.pl"
-        };
-
         let resultHTML = "";
 
         if (serviceKey === 'plamy') {
             const mintotal = acreage * minpricePerSqMeter;
             const maxtotal = acreage * maxpricePerSqMeter;
-            daneDoWyslania.szacowany_koszt = `${mintotal} - ${maxtotal} PLN`;
 
             resultHTML = `
                 💰 Wstępna wycena za <strong>${serviceName}</strong> (${acreage} m²) to: 
@@ -197,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         } else {
             const totalCost = acreage * pricePerSqMeter;
-            daneDoWyslania.szacowany_koszt = `${totalCost} PLN`;
 
             resultHTML = `
                 💰 Wstępna wycena za <strong>${serviceName}</strong> (${acreage} m²) to: 
@@ -210,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultDiv.classList.remove('hidden', 'bg-red-100', 'border-red-300');
         resultDiv.classList.add('bg-blue-50', 'border-blue-200');
 
-
+        handleDiscountCode();
     }
 
     if (form) {
@@ -219,6 +209,184 @@ document.addEventListener('DOMContentLoaded', () => {
             calculateEstimation();
         });
     }
+
+    // --- KONFIGURACJA KODU RABATOWEGO ---
+    const DISCOUNT_CONFIG = {
+        prefix: 'MEWASH',
+        validityMs: 60 * 6 * 10000, // 1 godzina w milisekundach
+        storageKey: 'mewash_discount_data'
+    };
+
+    // Generowanie losowego kodu rabatowego
+    function generateDiscountCode() {
+        const randomNum = Math.floor(1000 + Math.random() * 9000); // 4 losowe cyfry
+        return `${DISCOUNT_CONFIG.prefix}${randomNum}`;
+    }
+
+    // Pobieranie IP użytkownika
+    async function getUserIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+        } catch (error) {
+            console.log('Nie udało się pobrać IP:', error);
+            return 'nieznane';
+        }
+    }
+
+    // Sprawdzanie czy kod był już pokazany
+    function wasDiscountShown() {
+        const data = localStorage.getItem(DISCOUNT_CONFIG.storageKey);
+        if (!data) return false;
+
+        try {
+            const parsed = JSON.parse(data);
+            return parsed.shown === true;
+        } catch {
+            return false;
+        }
+    }
+
+    // Zapisywanie że kod został pokazany
+    function markDiscountAsShown(ip, code, expiryTime) {
+        const data = {
+            shown: true,
+            ip: ip,
+            code: code,
+            expiryTime: expiryTime,
+            timestamp: Date.now()
+        };
+        localStorage.setItem(DISCOUNT_CONFIG.storageKey, JSON.stringify(data));
+    }
+
+    // Formatowanie czasu pozostałego
+    function formatTimeRemaining(ms) {
+        if (ms <= 0) return '00:00:00';
+        const hours = Math.floor(ms / (1000 * 60 * 60));
+        const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Uruchomienie timera
+    let discountTimerInterval = null;
+    function startDiscountTimer(expiryTime) {
+        const modalTimerElement = document.getElementById('modal-timer');
+        const stickyTimerElement = document.getElementById('sticky-timer');
+        const stickyBar = document.getElementById('sticky-discount-bar');
+
+        if (discountTimerInterval) clearInterval(discountTimerInterval);
+
+        function updateTimers() {
+            const remaining = expiryTime - Date.now();
+            if (remaining <= 0) {
+                clearInterval(discountTimerInterval);
+                if (stickyBar) stickyBar.classList.add('hidden');
+                document.getElementById('discount-modal').classList.add('hidden'); // Zamknij modal jeśli czas minął
+                if (modalTimerElement) modalTimerElement.textContent = '00:00:00';
+                if (stickyTimerElement) stickyTimerElement.textContent = '00:00';
+            } else {
+                const formatted = formatTimeRemaining(remaining);
+                if (modalTimerElement) modalTimerElement.textContent = formatted.substring(3); // Bez godzin jeśli < 1h, ale formatTimeRemaining zwraca HH:MM:SS
+                if (stickyTimerElement) stickyTimerElement.textContent = formatted.substring(3, 8); // MM:SS
+            }
+        }
+
+        discountTimerInterval = setInterval(updateTimers, 1000);
+        updateTimers(); // Natychmiastowa aktualizacja
+    }
+
+    // Wyświetlanie kodu rabatowego - MODAL
+    function showDiscountCode(code, expiryTime) {
+        const modal = document.getElementById('discount-modal');
+        const modalCode = document.getElementById('modal-code');
+        const stickyCode = document.getElementById('sticky-code');
+        const stickyBar = document.getElementById('sticky-discount-bar');
+
+        // Ustaw kod
+        if (modalCode) modalCode.textContent = code;
+        if (stickyCode) stickyCode.textContent = code;
+
+        // Pokaż modal
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
+
+        // Obsługa zamykania modala
+        const closeModal = () => {
+            if (modal) modal.classList.add('hidden');
+            // Pokaż sticky bar po zamknięciu modala
+            if (stickyBar) stickyBar.classList.remove('hidden');
+        };
+
+        document.getElementById('close-modal-btn')?.addEventListener('click', closeModal);
+        document.getElementById('claim-discount-btn')?.addEventListener('click', closeModal);
+        document.getElementById('modal-overlay')?.addEventListener('click', closeModal);
+
+        // Kopiowanie kodu
+        document.getElementById('copy-discount-btn')?.addEventListener('click', () => {
+            const codeText = document.getElementById('modal-code').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                alert('Skopiowano kod do schowka: ' + codeText);
+            }).catch(err => {
+                console.error('Błąd kopiowania:', err);
+            });
+        });
+
+        startDiscountTimer(expiryTime);
+    }
+
+    async function handleDiscountCode() {
+        // Sprawdź czy kod był już pokazany
+        if (wasDiscountShown()) {
+            console.log('Kod rabatowy był już pokazany temu użytkownikowi');
+            return;
+        }
+
+        // Pobierz IP użytkownika
+        const ip = await getUserIP();
+
+        // Wygeneruj unikalny kod
+        const code = generateDiscountCode();
+        const expiryTime = Date.now() + DISCOUNT_CONFIG.validityMs;
+
+        // Zapisz w localStorage
+        markDiscountAsShown(ip, code, expiryTime);
+
+        // Pokaż kod użytkownikowi
+        showDiscountCode(code, expiryTime);
+    }
+
+    // Przywracanie kodu rabatowego przy ładowaniu strony
+    function restoreDiscountCodeOnLoad() {
+        const data = localStorage.getItem(DISCOUNT_CONFIG.storageKey);
+        if (!data) return;
+
+        try {
+            const parsed = JSON.parse(data);
+
+            // Sprawdź czy kod jest jeszcze ważny
+            if (parsed.expiryTime && parsed.expiryTime > Date.now()) {
+                // Kod jest jeszcze ważny - wyświetl go
+                showDiscountCode(parsed.code, parsed.expiryTime);
+                console.log('Przywrócono kod rabatowy:', parsed.code);
+            } else if (parsed.expiryTime && parsed.expiryTime <= Date.now()) {
+                // Kod wygasł - ukryj kontener
+                const container = document.getElementById('discountCodeContainer');
+                if (container) container.classList.add('hidden');
+                console.log('Kod rabatowy wygasł');
+            }
+        } catch (e) {
+            console.log('Błąd przywracania kodu:', e);
+        }
+    }
+
+    // Wywołaj przy ładowaniu strony
+    restoreDiscountCodeOnLoad(); // TYMCZASOWO WYŁĄCZONE
+
+
+
 
     // 4.1 Obsługa przycisków wyboru pakietu
     const packageButtons = document.querySelectorAll('.package-select-btn');
@@ -535,6 +703,248 @@ function initCoverageMap() {
     marker.addListener("click", () => {
         infoWindow.open(map, marker);
     });
+
+    // --- ŁADOWANIE OPINII GOOGLE (Places API New) ---
+    loadGoogleReviews();
+}
+
+let allGoogleReviews = [];
+let currentReviewIndex = 0;
+
+async function loadGoogleReviews() {
+    const reviewsContainer = document.getElementById('google-reviews-container');
+    if (!reviewsContainer) return;
+
+    try {
+        const { Place } = await google.maps.importLibrary("places");
+
+        const place = new Place({
+            id: 'ChIJG4y0KAUnG0cRzw8TtaYK5GM', // Place ID dla MeWash Turek
+            requestedLanguage: 'pl'
+        });
+
+        // Pobranie danych opinii ze struktury API (New)
+        await place.fetchFields({
+            fields: ['displayName', 'rating', 'reviews', 'userRatingCount']
+        });
+
+        if (place.rating && place.userRatingCount) {
+            updateDynamicRating(place.rating, place.userRatingCount);
+        }
+
+        allGoogleReviews = place.reviews || [];
+
+        if (allGoogleReviews && allGoogleReviews.length > 0) {
+            // Sortowanie od najnowszej do najstarszej (chronologicznie w dół)
+            // Zobacz API: review.publishTime z obiektem Date dla nowej wersji API
+            allGoogleReviews.sort((a, b) => {
+                const timeA = a.publishTime ? new Date(a.publishTime).getTime() : 0;
+                const timeB = b.publishTime ? new Date(b.publishTime).getTime() : 0;
+                return timeB - timeA; // Od największej (najnowszej) do najmniejszej daty
+            });
+
+            setupReviewControls();
+            renderReviews();
+        } else {
+            reviewsContainer.innerHTML = '<p class="text-center text-slate-500 w-full col-span-3">Niestety obiekt nie posiada opinii do wyświetlenia.</p>';
+        }
+    } catch (error) {
+        console.error('Błąd podczas pobierania opinii Google Places:', error);
+        reviewsContainer.innerHTML = '<p class="text-center text-slate-500 w-full col-span-3">Wystąpił błąd ładowania opinii. Odśwież stronę lub sprawdź bezpośrednio w Google Maps.</p>';
+    }
+}
+
+function renderReviews() {
+    const reviewsContainer = document.getElementById('google-reviews-container');
+    if (!reviewsContainer) return;
+
+    // Przymglenie przed zmianą zawartości (płynniejsze przejście)
+    reviewsContainer.style.opacity = '0';
+
+    setTimeout(() => {
+        // Pobranie odpowiedniej ilości opinii (1 na mobilkach, 3 na desktopie)
+        const isMobile = window.innerWidth < 768;
+        const itemsPerPage = isMobile ? 1 : 3;
+
+        // Zabezpieczenie przed wyjściem za zakres
+        if (currentReviewIndex + itemsPerPage > allGoogleReviews.length) {
+            currentReviewIndex = Math.max(0, allGoogleReviews.length - itemsPerPage);
+        }
+
+        const reviewsToShow = allGoogleReviews.slice(currentReviewIndex, currentReviewIndex + itemsPerPage);
+
+        let reviewsHTML = '';
+
+        reviewsToShow.forEach((review, index) => {
+            const authorAttribution = review.authorAttribution || {};
+            const authorName = authorAttribution.displayName || 'Google User';
+            const photoUrl = authorAttribution.photoURI || '';
+
+            // Generowanie gwiazdek
+            let starsHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= review.rating) {
+                    starsHTML += '<i class="fa-solid fa-star text-yellow-400"></i>';
+                } else {
+                    starsHTML += '<i class="fa-solid fa-star text-slate-200"></i>';
+                }
+            }
+
+            // Inicjał z nazwy
+            const initial = authorName.charAt(0).toUpperCase();
+
+            // Kolory tła dla inicjałów
+            const bgColors = ['bg-blue-100 text-primary', 'bg-green-100 text-green-600', 'bg-orange-100 text-orange-600'];
+            // Przesunięcie kolorów, żeby ta sama opinia miała zawsze ten sam kolor niezależnie od pozycji
+            const reviewIdSeed = review.authorAttribution?.displayName?.length || index;
+            const colorClass = bgColors[reviewIdSeed % bgColors.length];
+
+            // Tekst opinii
+            let reviewText = extractReviewText(review);
+
+            if (reviewText.length > 150) {
+                reviewText = reviewText.substring(0, 150) + '...';
+            }
+
+            reviewsHTML += `
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-4">
+                        ${photoUrl ?
+                    `<img src="${photoUrl}" alt="${authorName}" class="w-12 h-12 rounded-full object-cover">` :
+                    `<div class="w-12 h-12 ${colorClass} font-bold text-xl rounded-full flex justify-center items-center">${initial}</div>`
+                }
+                        <div>
+                            <h4 class="font-bold text-dark whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px]" title="${authorName}">${authorName}</h4>
+                            <div class="flex text-sm">
+                                ${starsHTML}
+                            </div>
+                        </div>
+                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" class="w-5 h-5 opacity-80 flex-shrink-0">
+                </div>
+                <p class="text-slate-600 italic leading-relaxed text-sm">"${reviewText}"</p>
+            </div>
+            `;
+        });
+
+        reviewsContainer.innerHTML = reviewsHTML;
+        reviewsContainer.style.opacity = '1';
+        updateReviewControls();
+    }, 200);
+}
+
+function setupReviewControls() {
+    const prevBtn = document.getElementById('prev-review-btn');
+    const nextBtn = document.getElementById('next-review-btn');
+    const prevBtnMob = document.getElementById('prev-review-btn-mobile');
+    const nextBtnMob = document.getElementById('next-review-btn-mobile');
+    const mobileControls = document.getElementById('mobile-review-controls');
+
+    if (allGoogleReviews.length > 0) {
+        if (mobileControls && allGoogleReviews.length > 1) {
+            mobileControls.style.display = 'flex';
+        }
+    }
+
+    const slidePrev = () => {
+        if (currentReviewIndex > 0) {
+            currentReviewIndex--;
+            renderReviews();
+        }
+    };
+
+    const slideNext = () => {
+        const isMobile = window.innerWidth < 768;
+        const itemsPerPage = isMobile ? 1 : 3;
+        if (currentReviewIndex + itemsPerPage < allGoogleReviews.length) {
+            currentReviewIndex++;
+            renderReviews();
+        }
+    };
+
+    if (prevBtn) prevBtn.addEventListener('click', slidePrev);
+    if (nextBtn) nextBtn.addEventListener('click', slideNext);
+    if (prevBtnMob) prevBtnMob.addEventListener('click', slidePrev);
+    if (nextBtnMob) nextBtnMob.addEventListener('click', slideNext);
+
+    // Przelicz układ przy zmianie szerokości okna
+    window.addEventListener('resize', () => {
+        clearTimeout(window.resizeReviewTimer);
+        window.resizeReviewTimer = setTimeout(() => {
+            // Waliduj index przy zmianie układu (mobile -> desktop)
+            const isMobile = window.innerWidth < 768;
+            const itemsPerPage = isMobile ? 1 : 3;
+            if (currentReviewIndex + itemsPerPage > allGoogleReviews.length) {
+                currentReviewIndex = Math.max(0, allGoogleReviews.length - itemsPerPage);
+            }
+            renderReviews();
+        }, 150);
+    });
+}
+
+function updateReviewControls() {
+    const isMobile = window.innerWidth < 768;
+    const itemsPerPage = isMobile ? 1 : 3;
+
+    const prevBtns = [document.getElementById('prev-review-btn'), document.getElementById('prev-review-btn-mobile')];
+    const nextBtns = [document.getElementById('next-review-btn'), document.getElementById('next-review-btn-mobile')];
+
+    prevBtns.forEach(btn => {
+        if (btn) btn.disabled = currentReviewIndex <= 0;
+    });
+
+    nextBtns.forEach(btn => {
+        if (btn) btn.disabled = currentReviewIndex + itemsPerPage >= allGoogleReviews.length;
+    });
+}
+
+function extractReviewText(review) {
+    if (review.text) return review.text;
+    if (review.originalText && review.originalText.text) return review.originalText.text;
+    if (review.text && review.text.text) return review.text.text;
+    return "Bardzo dobra usługa.";
+}
+
+function updateDynamicRating(rating, count) {
+    // 1. Aktualizacja wizualna przycisku opinii na stronie
+    const ratingEl = document.getElementById('dynamic-overall-rating');
+    const starsEl = document.getElementById('dynamic-overall-stars');
+    const countEl = document.getElementById('dynamic-total-reviews');
+
+    if (ratingEl) ratingEl.textContent = rating.toFixed(1).replace('.', ',');
+    if (countEl) countEl.textContent = `Na podstawie ${count} opinii na Google`;
+
+    if (starsEl) {
+        let starsHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                starsHTML += '<i class="fa-solid fa-star text-yellow-400"></i>';
+            } else if (i - 0.5 <= rating) {
+                starsHTML += '<i class="fa-solid fa-star-half-stroke text-yellow-400"></i>';
+            } else {
+                starsHTML += '<i class="fa-solid fa-star text-slate-200"></i>';
+            }
+        }
+        starsEl.innerHTML = starsHTML;
+    }
+
+    // 2. Aktualizacja niewidzialnego Schema.org JSON-LD (dla wyników w Google!)
+    const schemaScript = document.getElementById('schema-local-business');
+    if (schemaScript) {
+        try {
+            const schemaData = JSON.parse(schemaScript.innerHTML);
+            // Tworzenie węzła lub nadpisanie jeśli istnieje
+            schemaData.aggregateRating = {
+                "@type": "AggregateRating",
+                "ratingValue": rating.toFixed(1), // Kropka dziesiętna w JSON LD po stronie Google
+                "reviewCount": count.toString()
+            };
+            schemaScript.innerHTML = JSON.stringify(schemaData, null, 2);
+        } catch (e) {
+            console.error("Błąd parsowania i zastępowania ocen Schema.org:", e);
+        }
+    }
 }
 
 // Wywołanie po załadowaniu Google Maps API

@@ -53,7 +53,7 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <script type="application/ld+json">
+    <script type="application/ld+json" id="schema-local-business">
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
@@ -76,28 +76,19 @@
       ],
       "url": "https://www.mewash.pl",
       "priceRange": "$$",
-      "description": "Specjalistyczne mycie ciśnieniowe kostki brukowej, elewacji i dachów. Działamy na terenie powiatu tureckiego i całej Wielkopolski."
+      "description": "Specjalistyczne mycie ciśnieniowe kostki brukowej, elewacji i dachów. Działamy na terenie powiatu tureckiego i całej Wielkopolski.",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "5"
+      }
     }
     </script>
 </head>
 
 <body class="bg-slate-50 text-slate-800 antialiased relative">
 
-    <!-- Pasek Promocyjny -->
-    <div id="promo-bar"
-        class="fixed top-0 left-0 w-full z-[60] bg-gradient-to-r from-green-600 to-emerald-600 text-white text-xs md:text-sm font-medium py-2 px-4 shadow-md text-center">
-        <p class="inline-flex items-center gap-2 animate-pulse-slow leading-tight">
-            <span>🌸 <b>Wiosenna Promocja:</b> -10% na każde zlecenie umówione do 10 marca 2026!</span>
-            <a href="tel:+48796548295"
-                class="underline hover:text-green-200 font-bold whitespace-nowrap md:hidden">Zadzwoń
-                teraz</a>
-            <a href="#kontakt"
-                class="underline hover:text-green-200 font-bold whitespace-nowrap hidden md:inline">Zadzwoń
-                teraz</a>
-        </p>
-    </div>
-
-    <nav class="fixed top-[34px] md:top-[36px] w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200"
+    <nav class="fixed top-[0px] md:top-[0px] w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200"
         id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
@@ -110,6 +101,8 @@
                     <a href="#dlaczego-my" class="text-slate-600 hover:text-primary font-medium transition">Dlaczego
                         My?</a>
                     <a href="#pakiety" class="text-slate-600 hover:text-primary font-medium transition">Pakiety</a>
+                    <a href="#opinie" class="text-slate-600 hover:text-primary font-medium transition">Co sądzą o nas
+                        inni?</a>
                     <a href="#faq" class="text-slate-600 hover:text-primary font-medium transition">FAQ</a>
                     <a href="#kalkulator"
                         class="relative bg-primary hover:bg-sky-600 text-white px-6 py-2.5 rounded-full font-semibold shadow-lg shadow-primary/30 transition transform hover:-translate-y-0.5 overflow-hidden group">
@@ -131,6 +124,7 @@
             <a href="#realizacje" class="block text-slate-600 font-medium">Efekt WOW</a>
             <a href="#dlaczego-my" class="block text-slate-600 font-medium">Dlaczego My?</a>
             <a href="#pakiety" class="block text-slate-600 font-medium">Pakiety</a>
+            <a href="#opinie" class="block text-slate-600 font-medium">Opinie</a>
             <a href="#faq" class="block text-slate-600 font-medium">FAQ</a>
             <a href="#kontakt" class="block text-primary font-bold">Zamów Wycenę</a>
         </div>
@@ -154,12 +148,12 @@
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div
-                class="inline-block mb-4 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-blue-50 border border-blue-100 text-primary font-semibold text-[10px] md:text-sm tracking-wide uppercase reveal">
-                Działamy w Turku i całej Wielkopolsce
-            </div>
             <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-dark mb-6 reveal leading-tight pb-2 text-center"
                 style="transition-delay: 100ms;">
+                <div
+                    class="inline-block mb-4 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-blue-50 border border-blue-100 text-primary font-semibold text-[10px] md:text-sm tracking-wide uppercase reveal">
+                    Działamy w Turku i całej Wielkopolsce
+                </div>
                 <span class="block mb-1 sm:mb-2 md:mb-3 md:whitespace-nowrap text-center"
                     style="text-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                     Zamiast wymiany <span class="hidden sm:inline">-</span> dokładne mycie.
@@ -794,7 +788,79 @@
                 </div>
     </section>
 
-    <section id="faq" class="py-20 bg-slate-50 border-t border-slate-100">
+    <section id="opinie" class="py-20 bg-slate-50 border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                        alt="Google Logo" class="w-8 h-8">
+                    <div class="flex text-yellow-400 text-xl">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Oceny naszych Klientów</h2>
+                <p class="text-slate-600 text-lg">Sprawdź, co mówią o nas osoby, którym przywróciliśmy czystość wokół
+                    ich domu.</p>
+            </div>
+
+            <div class="relative max-w-7xl mx-auto">
+                <!-- Przycisk Poprzednia -->
+                <button id="prev-review-btn"
+                    class="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 lg:-ml-12 bg-white w-12 h-12 rounded-full shadow-md text-primary flex items-center justify-center z-10 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed hidden md:flex transition-all"
+                    aria-label="Poprzednie opinie">
+                    <i class="fa-solid fa-chevron-left text-xl"></i>
+                </button>
+
+                <div id="google-reviews-container"
+                    class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto transition-opacity duration-300 min-h-[250px]">
+                    <div class="col-span-3 text-center text-slate-500 py-12 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-spinner fa-spin text-3xl text-primary mb-4"></i>
+                        Ładowanie opinii z Google...
+                    </div>
+                </div>
+
+                <!-- Przycisk Następna -->
+                <button id="next-review-btn"
+                    class="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 lg:-mr-12 bg-white w-12 h-12 rounded-full shadow-md text-primary flex items-center justify-center z-10 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed hidden md:flex transition-all"
+                    aria-label="Następne opinie">
+                    <i class="fa-solid fa-chevron-right text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobilne sterowanie pod opiniami -->
+            <div class="flex justify-center gap-4 mt-8 md:hidden" id="mobile-review-controls" style="display: none;">
+                <button id="prev-review-btn-mobile"
+                    class="bg-white w-12 h-12 rounded-full shadow-sm border border-slate-200 text-primary flex items-center justify-center hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    aria-label="Poprzednie opinie">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button id="next-review-btn-mobile"
+                    class="bg-white w-12 h-12 rounded-full shadow-sm border border-slate-200 text-primary flex items-center justify-center hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    aria-label="Następne opinie">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="text-center mt-12 reveal" style="transition-delay: 300ms;">
+                <a href="https://g.page/r/CUcTGwfUKsA_EBM/review" target="_blank"
+                    class="inline-flex items-center gap-2 bg-white px-5 py-2.5 rounded-full border border-slate-200 shadow-sm text-sm font-medium text-slate-700 hover:shadow-md hover:border-slate-300 hover:text-primary transition-all cursor-pointer group">
+                    <span id="dynamic-overall-rating"
+                        class="font-bold text-dark text-base group-hover:text-primary transition-colors">5.0</span>
+                    <div id="dynamic-overall-stars" class="flex text-yellow-400 text-xs">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-20 bg-white border-t border-slate-100">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 reveal">
                 <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Pytania i odpowiedzi</h2>
@@ -962,8 +1028,8 @@
                         <img src="mewashicon.png" alt="Logo" class="icon-img">
                     </a>
                     <p class="leading-relaxed max-w-xs mx-auto">
-                        Profesjonalne mycie ciśnieniowe kostki brukowej i elewacji. Impregnacja, usuwanie plam, wykiwtów
-                        i rdzy - To MY!
+                        Profesjonalne mycie ciśnieniowe kostki brukowej i elewacji.
+                        Impregnacja, usuwanie plam, wykiwtów i rdzy w Turku i całej Wielkopolsce - To MY!
                     </p>
                 </div>
 
@@ -971,8 +1037,10 @@
                     <br>
                     <h4 class="text-white font-bold mb-4 uppercase tracking-wider">Obszar działania</h4>
                     <p class="leading-relaxed max-w-xs mx-auto">
-                        <span class="text-green-400 font-semibold">Do 50 km – darmowy dojazd!</span><br>
-                        Powyżej 50 km – obsługujemy całą Wielkopolskę.
+                        <span class="text-green-400 font-semibold">Do 50 km od Turku – darmowy
+                            dojazd!</span><br>
+                        Obsługujemy całą Wielkopolskę w tym Konin, Koło, Kalisz, Słupca, Poddębice, Uniejów, Dąbie,
+                        Sompolno, Tuliszków, Września.
                     </p>
                 </div>
 
@@ -980,6 +1048,11 @@
                     <br>
                     <h4 class="text-white font-bold mb-4 uppercase tracking-wider">Kontakt</h4>
                     <ul class="space-y-2">
+                        <li>
+                            <a href="https://maps.app.goo.gl/4vDEDzgwKjQJ6ce18"
+                                class="text-white text-base font-bold hover:text-primary transition duration-300">Turek,
+                                Polska</a>
+                        </li>
                         <li>
                             Tel: <a href="tel:+48796548295"
                                 class="text-white font-semibold hover:text-primary transition duration-300">+48 796 548
@@ -1022,7 +1095,7 @@
     </noscript>
     <script src="script.js" defer></script>
     <script defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ7JJ9jmzzJdY81pD9jlxtTUz0Zx1XLEs&callback=initCoverageMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ7JJ9jmzzJdY81pD9jlxtTUz0Zx1XLEs&v=weekly&libraries=places&callback=initCoverageMap">
         </script>
     <div id="discount-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4">
         <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm transition-opacity" id="modal-overlay"></div>
